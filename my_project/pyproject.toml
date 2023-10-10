@@ -14,6 +14,7 @@ classifiers = [
 python = "^3.10"
 dynaconf = "^3.1.12"
 click = "^8.1.3"
+pyautogui = "*"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.17.4"
