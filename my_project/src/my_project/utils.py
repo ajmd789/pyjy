@@ -20,24 +20,24 @@ def analysis_pixel():
     width, height = 1920, 1080
     img = ImageGrab.grab((0, 0, width, height))
     imgData = img.getdata()
-    # imgDataNp = np.array(imgData).reshape((1920,1080,3))  # 转换成三维数组
-
     spacing = int(width / 5)  # 两条竖线之间的间距
-    for i in range(6):  # 遍历6条竖线
-        for j in range(height):  # 遍历竖线上的像素点
-            place = j*width + i*spacing  # 第i列第j行在imgData的位置
+    
+    for i in range(6):
+        for j in range(height):
+            place = j * width + i * spacing
             try:
-                if imgData[place] == (236, 236, 236):  # 找到(236,236,236)这个颜色值
-                    if imgData[place-width] == (245, 245, 245) and imgData[place+width] in ((245, 245, 245), (255, 255, 255)):
-                        # 判断分割线上面一个像素点和下面一个像素点的RGB值是否符合，防止误判
-
-                        for long in range(1, 21):  # 判断分割线连续20个像素点是否都为(236,236,236)，防止误判
-                            if imgData[place+long] != (236, 236, 236):
+                if imgData[place] == (236, 236, 236):
+                    if imgData[place - width] == (245, 245, 245) and imgData[place + width] in ((245, 245, 245), (255, 255, 255)):
+                        for long in range(1, 21):
+                            if imgData[place + long] != (236, 236, 236):
                                 break
                         else:
-                            # 返回正确的位置(微信输入框分割线上某个点的位置）
-                            return place % width, int(place/width)
+                            # 找到微信输入框的位置
+                            x, y = place % width, int(place / width)
+                            print(f"找到微信输入框位置：({x}, {y})")
+                            return x, y
             except IndexError:
                 # 当遍历到最后一个点的时候会超出索引范围
-                return 0
-    return 0
+                return None
+    print("未找到微信输入框位置")
+    return None
