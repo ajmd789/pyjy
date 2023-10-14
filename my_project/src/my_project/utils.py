@@ -21,7 +21,7 @@ def analysis_pixel():
     img = ImageGrab.grab((0, 0, width, height))
     imgData = img.getdata()
     spacing = int(width / 5)  # 两条竖线之间的间距
-    
+
     for i in range(6):
         for j in range(height):
             place = j * width + i * spacing
@@ -41,3 +41,13 @@ def analysis_pixel():
                 return None
     print("未找到微信输入框位置")
     return None
+
+
+def startQQ():
+    import subprocess
+
+    # 定义要执行的命令
+    command = 'start "" "C:\\Program Files (x86)\\Tencent\\QQ\\Bin\\QQScLauncher.exe"'
+
+    # 执行命令
+    subprocess.run(command, shell=True)
