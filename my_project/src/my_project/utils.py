@@ -27,7 +27,7 @@ def moveMouseToSearchBar():
     pyautogui.moveTo(1290, 20, duration=1)  # 可选：duration参数表示鼠标移动到目标位置的时间（秒）
 
 # 移动鼠标到指定区域
-def moveMouseToTargetArea(coordinates):
+def moveMouseToTargetArea(coordinates,widthRight=None):
     try:
         # 检查输入参数是否为空或者长度不为2
         if coordinates is None or len(coordinates) != 2:
@@ -45,9 +45,12 @@ def moveMouseToTargetArea(coordinates):
         target_center_y = (top_left[1] + bottom_right[1]) // 2
 
         # 计算横向平移后的新坐标
-        new_x = target_center_x + 200
-        new_y = target_center_y
-
+        if(widthRight):
+            new_x = target_center_x + widthRight
+            new_y = target_center_y
+        else:
+            new_x = target_center_x 
+            new_y = target_center_y
         # 移动鼠标到新坐标位置
         pyautogui.moveTo(new_x, new_y, duration=0.5)  # duration参数表示鼠标移动到目标位置的时间（秒）
 
@@ -58,6 +61,7 @@ def moveMouseToTargetArea(coordinates):
         print(f"出错：{e}")
         # 返回None表示出错
         return None
+    
 def analysis_pixel():
     width, height = 1920, 1080
     img = ImageGrab.grab((0, 0, width, height))
@@ -94,6 +98,7 @@ def startQQ():
     time.sleep(3)
     # 模拟按下Enter键
     pyautogui.press('enter')
+    time.sleep(10)
 
 
 def imgToString():
@@ -123,7 +128,7 @@ def find_and_highlight_img(target_image_path):
     # 在屏幕图像中寻找目标图像的匹配位置
     result = cv2.matchTemplate(screen_img, target_img, cv2.TM_CCOEFF_NORMED)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-
+    print(min_val, max_val, min_loc, max_loc)
     # 获取目标图像的宽度和高度
     target_width, target_height = target_img.shape[1], target_img.shape[0]
 
@@ -145,4 +150,13 @@ def find_and_highlight_img(target_image_path):
     else:
         print("Error: Target image not found on the screen.")
         return None
+
+def open_send_info():
+    send_path = r"C:\Users\Tom\Pictures\aiPractice\qqSendButton.jpg"
+    time.sleep(3)
+    send_position = find_and_highlight_img(send_path)
+    send_button_result = moveMouseToTargetArea(send_position)
+    if send_button_result is not None:
+        print(f"鼠标成功移动到目标位置：{send_button_result}")
+        
 
