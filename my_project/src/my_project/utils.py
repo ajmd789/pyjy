@@ -9,6 +9,7 @@ import cv2
 from PIL import Image
 import pyscreeze
 import pyperclip
+import re
 
 
 def help():
@@ -99,6 +100,7 @@ def analysis_pixel():
 
 
 def start_qq_from_the_taskbar():
+    print('start')
     image_path = r"C:\Users\Tom\Pictures\aiPractice\qqSoftIcon.jpg"
     # 寻找图片区域坐标
     postion = find_and_highlight_img(image_path)
@@ -119,7 +121,6 @@ def start_soft_from_none(image_path):
         return True
     else:
         return False
-    # "C:\Users\Tom\Pictures\aiPractice\jqkaIcon.jpg"
 
 
 def startQQ():
@@ -170,10 +171,10 @@ def find_and_highlight_img(target_image_path):
         bottom_right = (top_left[0] + target_width,
                         top_left[1] + target_height)
 
-        # 在屏幕图像上绘制匹配区域的边框
+        # # 在屏幕图像上绘制匹配区域的边框
         # cv2.rectangle(screen_img, top_left, bottom_right, (0, 0, 255), 2)
 
-        # 显示标记了匹配区域的图像
+        # # 显示标记了匹配区域的图像
         # cv2.imshow('Highlighted Image', screen_img)
         # cv2.waitKey(0)  # 等待用户按下任意键
         # cv2.destroyAllWindows()  # 关闭所有OpenCV窗口
@@ -221,7 +222,7 @@ def moveMouseToNewMessage(wdith, height):
 
 
 def showDesktop():
-    time.sleep(5)
+    time.sleep(1)
     try:
         # 使用Win + D组合键最小化所有窗口显示桌面
         pyautogui.hotkey('win', 'd')
@@ -241,16 +242,97 @@ def start_jqka_from_none(image_path):
 
 
 def showMaxJqka(copied_text):
-    time.sleep(5)
-    # 同花顺有键盘精灵可以直接录入数字然后搜索
-    # moveMouseToSearchBar()
-    # pyautogui.click()
-    # 这里等待一段时间确保录入框已经完全打开
-    # 模拟Ctrl + V操作，将剪贴板中的文本粘贴到录入框中
-    # 逐个输入字符串的字符
-    moveMouseToNewMessage(1042,532)
-    pyautogui.click()
-    pyautogui.typewrite(copied_text)
+    moveMouseToNewMessage(1042, 532)
+    pyautogui.doubleClick()
+    time.sleep(10)
+    interval = 0.1  # 设置输入速度，以秒为单位
+    pyautogui.typewrite(copied_text, interval=interval)
     time.sleep(2)
     # 模拟按下Enter键
     pyautogui.press('enter')
+
+
+def start_chrome(code):
+    can_start_chrome = start_chrome_from_none(
+        r"C:\Users\Tom\Pictures\aiPractice\chromeIcon.jpg")
+    if can_start_chrome:
+        pyautogui.click()
+        moveMouseToNewMessage(1052, 80)
+        pyautogui.click()
+        copied_text = 'https://xueqiu.com/S/SZ002567'
+        interval = 0.03  # 设置输入速度，以秒为单位
+        # 模拟按下Ctrl + A（全选）
+        pyautogui.sleep(1)  # 例如等待1秒
+        pyautogui.hotkey('ctrl', 'a')
+
+        # 等待一些时间，以确保全选操作完成（可以根据实际情况调整等待时间）
+        pyautogui.sleep(1)  # 例如等待1秒
+
+        # 模拟按下Delete键（删除选中的内容）
+        pyautogui.press('delete')
+        pyautogui.typewrite(copied_text, interval=interval)
+        pyautogui.sleep(0.5)  # 例如等待1秒
+        pyautogui.press('enter')
+
+        pyautogui.sleep(3)  # 例如等待1秒
+        moveMouseToNewMessage(990, 133)
+        pyautogui.click()
+        copied_text = code
+        pyautogui.click()
+        pyautogui.typewrite(copied_text, interval=interval)
+        pyautogui.sleep(3)
+        moveMouseToNewMessage(874, 230)
+        pyautogui.click()
+        pyautogui.sleep(3)
+        pyautogui.click()
+        pyautogui.hotkey('ctrl', 'a')
+        # 模拟鼠标点击和复制操作（Ctrl + C）
+        pyautogui.hotkey('ctrl', 'c')
+        # 获取剪贴板的内容
+        copied_text = pyperclip.paste()
+        # 定义正则表达式模式
+        pattern = r'¥.*?%'
+
+        # 使用正则表达式进行匹配
+        matches = re.findall(pattern, copied_text)
+        print(matches)
+        # 输出匹配到的结果
+        showDesktop()
+        for match in matches:
+            print("".join(match))
+
+            start_qq_from_the_taskbar()
+            # 识别图片内容
+            # imgToString()
+            image_path = r"C:\Users\Tom\Pictures\aiPractice\QQIcon.jpg"
+            # 寻找图片区域坐标
+            postion = find_and_highlight_img(image_path)
+            print("移动鼠标")
+            # 打开qq群
+            result = moveMouseToTargetArea(postion, 200)
+            if result:
+                doubleClick()
+                open_send_info_type_stock_price()
+                pyautogui.typewrite(match, interval=interval)
+                # 模拟按下Enter键
+                pyautogui.press('enter')
+
+
+def start_chrome_from_none(image_path):
+    # 寻找图片区域坐标
+    postion = find_and_highlight_img(image_path)
+    result = moveMouseToTargetArea(postion, 80)
+    if result is not None:
+        return True
+    else:
+        return False
+
+
+def open_send_info_type_stock_price():
+    send_path = r"C:\Users\Tom\Pictures\aiPractice\qqSendButton.jpg"
+    time.sleep(1)
+    send_position = find_and_highlight_img(send_path)
+    send_button_result = moveMouseToTargetArea(send_position, -200)
+    if send_button_result is not None:
+        print(f"鼠标成功移动到目标位置：{send_button_result}")
+        time.sleep(1)

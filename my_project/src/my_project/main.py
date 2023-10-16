@@ -11,7 +11,7 @@ from utils import showDesktop
 from utils import start_qq_from_the_taskbar
 from utils import start_soft_from_none
 from utils import showMaxJqka
-
+from utils import start_chrome
 
 def main():
     # startQQ()
@@ -32,16 +32,18 @@ def main():
         copied_text = open_send_info()
         if copied_text:
             showDesktop()
+            start_chrome(copied_text)
+            
             # "C:\Users\Tom\Pictures\aiPractice\jqkaIcon.jpg"
-            can_start_jqka = start_soft_from_none(
-                r"C:\Users\Tom\Pictures\aiPractice\jqkaIcon.jpg")
-            if can_start_jqka:
-                doubleClick()
-                showDesktop()
-                can_start_jqka = start_soft_from_none(
-                r"C:\Users\Tom\Pictures\aiPractice\jqkaIcon.jpg")
-                doubleClick()
-                showMaxJqka(copied_text)
+            # can_start_jqka = start_soft_from_none(
+            #     r"C:\Users\Tom\Pictures\aiPractice\jqkaIcon.jpg")
+            # if can_start_jqka:
+            #     doubleClick()
+            #     showDesktop()
+            #     can_start_jqka = start_soft_from_none(
+            #     r"C:\Users\Tom\Pictures\aiPractice\jqkaIcon.jpg")
+            #     doubleClick()
+            #     showMaxJqka(copied_text)
     else:
         print("鼠标移动失败")
 
