@@ -10,12 +10,14 @@ from PIL import Image
 import pyscreeze
 import pyperclip
 import re
-
-
+import PIL.ImageGrab
+import datetime
 def help():
     print("Hello, World!")
 
-
+def current_time():
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # 获取当前北京时间
+    return  current_time
 def doubleClick():
     """
     Perform a double click at the current mouse cursor location.
@@ -317,6 +319,9 @@ def start_chrome(code):
                 # 模拟按下Enter键
                 pyautogui.press('enter')
 
+                # 在操作之后清空剪切板的内容
+                pyperclip.copy('')
+
 
 def start_chrome_from_none(image_path):
     # 寻找图片区域坐标
@@ -336,3 +341,24 @@ def open_send_info_type_stock_price():
     if send_button_result is not None:
         print(f"鼠标成功移动到目标位置：{send_button_result}")
         time.sleep(1)
+
+
+def get_difference_between_screen_shot():
+    # 562.484,1144,633
+    # Set the region you want to monitor (left, top, width, height)
+    time.sleep(5)
+    monitoring_region = (562, 484, 1144, 633)
+    values = pytesseract.image_to_string(
+        ImageGrab.grab().crop(monitoring_region))
+    
+    # 使用正则表达式查找5或6位连续数字
+    pattern = r'\b\d{5,6}\b'  # 匹配5或6位连续数字的正则表达式
+    matches = re.findall(pattern, values)
+
+    # 如果找到匹配项，则打印出来，否则返回None
+    if matches:
+        print(matches[0])
+        return matches[0]
+    else:
+        return None
+        
