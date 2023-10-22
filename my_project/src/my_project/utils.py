@@ -12,6 +12,8 @@ import pyperclip
 import re
 import PIL.ImageGrab
 import datetime
+import itertools
+
 def help():
     print("Hello, World!")
 
@@ -361,4 +363,3 @@ def get_difference_between_screen_shot():
         return matches[0]
     else:
         return None
-        

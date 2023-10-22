@@ -15,6 +15,7 @@ from utils import start_chrome
 from utils import get_difference_between_screen_shot
 from utils import current_time
 
+
 def main():
     res = get_difference_between_screen_shot()
     print(res,'<-识别',current_time())
